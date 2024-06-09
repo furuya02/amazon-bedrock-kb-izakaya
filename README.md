@@ -35,3 +35,9 @@
 
 %  aws s3 cp assets/izakaya_menu.txt s3://kb-izakaya-xxxxxxxxxxxx/izakaya_menu.txt
 ```
+
+## ブログ
+
+詳しくは、下記のブログをご参照ください。
+
+https://dev.classmethod.jp/articles/knowledge-bases-for-amazon-bedrock-with-cdk/
