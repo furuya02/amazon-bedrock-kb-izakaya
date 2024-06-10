@@ -6,7 +6,7 @@
 ```
 % git clone https://github.com/furuya02/amazon-bedrock-kb-izakaya.git
 % cd amazon-bedrock-kb-izakaya
-% npm install
+% npm i
 ```
 
 ## cdk.json 編集
@@ -34,6 +34,16 @@
 % aws s3 cp assets/izakaya_guidance.pdf s3://kb-izakaya-xxxxxxxxxxxx/izakaya_guidance.pdf
 
 %  aws s3 cp assets/izakaya_menu.txt s3://kb-izakaya-xxxxxxxxxxxx/izakaya_menu.txt
+```
+## 削除
+
+1. S3バケットにコピーしたizakaya_guidance.pdf及び、izakaya_menu.txtを削除
+2. CDK destory
+
+```
+% cd amazon-bedrock-kb-izakaya
+% npm i
+% npx cdk destroy
 ```
 
 ## ブログ
