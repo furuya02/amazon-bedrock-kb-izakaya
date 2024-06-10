@@ -23,28 +23,28 @@ export class AmazonBedrockKbIzakayaStack extends cdk.Stack {
     const knowledgeBaseRole = new aws_iam.Role(this, `KnowledgeBaseRole`, {
       roleName: `${tag}_role`,
       assumedBy: new aws_iam.ServicePrincipal("bedrock.amazonaws.com"),
+      inlinePolicies: {
+        inlinePolicy1: new aws_iam.PolicyDocument({
+          statements: [
+            new aws_iam.PolicyStatement({
+              resources: [pineconeSecretArn],
+              actions: ["secretsmanager:GetSecretValue"],
+            }),
+            new aws_iam.PolicyStatement({
+              resources: [embeddingModelArn],
+              actions: ["bedrock:InvokeModel"],
+            }),
+            new aws_iam.PolicyStatement({
+              resources: [
+                `arn:aws:s3:::${bucketName}`,
+                `arn:aws:s3:::${bucketName}/*`,
+              ],
+              actions: ["s3:ListBucket", "s3:GetObject"],
+            }),
+          ],
+        }),
+      },
     });
-    knowledgeBaseRole.addToPolicy(
-      new aws_iam.PolicyStatement({
-        resources: [pineconeSecretArn],
-        actions: ["secretsmanager:GetSecretValue"],
-      })
-    );
-    knowledgeBaseRole.addToPolicy(
-      new aws_iam.PolicyStatement({
-        resources: [embeddingModelArn],
-        actions: ["bedrock:InvokeModel"],
-      })
-    );
-    knowledgeBaseRole.addToPolicy(
-      new aws_iam.PolicyStatement({
-        resources: [
-          `arn:aws:s3:::${bucketName}`,
-          `arn:aws:s3:::${bucketName}/*`,
-        ],
-        actions: ["s3:ListBucket", "s3:GetObject"],
-      })
-    );
 
     // knowledge Base
     const knowledgeBase = new aws_bedrock.CfnKnowledgeBase(
@@ -73,8 +73,6 @@ export class AmazonBedrockKbIzakayaStack extends cdk.Stack {
         description: "IZAKAYA knowledge base",
       }
     );
-    //addDependencyが無いと、no identity-based policy allows the secretsmanager:GetSecretValue action というエラーが出る
-    knowledgeBase.node.addDependency(knowledgeBaseRole);
 
     // data source
     new aws_bedrock.CfnDataSource(this, "BedrockKnowledgeBaseDataStore", {
